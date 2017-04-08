@@ -71,33 +71,42 @@ class NationalPark():
 		soup = BeautifulSoup(html_doc, "html.parser")
 		# Park State
 		self.state = soup.title.text
-		#list of types of parks in a state
-		self.type = soup.find_all("h2")
 		#list of parks in a state
 		self.parks_list = soup.find_all("h3")
 		#create a dictionary with {park_name:description}
 		parks = soup.find_all("div",{"class" : "col-md-9 col-sm-9 col-xs-12 table-cell list_left"})
+
 		parks_dict = {}
 		for avalue in parks:
-			park_name = soup.find("h3").text
-			desc = soup.find("p").text
+			park_name = avalue.find("h3").text
+			desc = avalue.find("p").text
 			parks_dict[park_name] = desc
 		self.parks_desc = parks_dict
 
 		#location dictionary with {park : location}
 		parks_loc = {}
 		for avalue in parks:
-			park_name = soup.find("h3").text
-			location = soup.find("h4").text
+			park_name = avalue.find("h3").text
+			location = avalue.find("h4").text
 			parks_loc[park_name] = location
 		self.location = parks_loc
 
 		#list of urls associated with each park
+		#THIS ONE IS NOT WORKING
 		parks_urls = {}
 		for avalue in parks:
-			park_name = soup.find("h3").text
-			park_url = soup.find_all("href")
+			park_name = avalue.find("h3").text
+			park_url = avalue.find_all("href")
 			parks_urls[park_name] = park_url
+		self.urls = parks_urls
+
+		#list of the types of park in each state
+		park_list = {}
+		for avalue in parks:
+			park_name = avalue.h3.text
+			park_type = avalue.h2.text
+			park_list[park_name] = park_type
+		self.type = park_list
 
 
 	def add_park(self, new_park_name):
@@ -120,58 +129,14 @@ class NationalPark():
 
 #<h3><a href="/bicr/">Birmingham Civil Rights</a></h3>
 #MY OWN TESTS =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 htmldoc = get_np_states()
 avalue = htmldoc[0]
-print(type(avalue))
 test = NationalPark(avalue)
-print("State is: ")
-print(test.state)
+# print("State is: ")
+# print(test.state)
+print("OK, so here is where the real test begins\n\n")
 print(test.type)
-# soup = BeautifulSoup(avalue, "html.parser")
-
-# test = NationalPark(avalue)
-
-# htmldoc = get_np_states()
-# souplist = []
-
-# for avalue in htmldoc:
-# 	print(avalue)
-# 	print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-
-
-
-# # 	soup = BeautifulSoup(avalue, "html.parser")
-# # 	souplist.append(soup)
-# # soup = souplist[0]
-
-# #state
-# print(soup.title.text) #Alabama (U.S. National Park Service)
-# #list of parks in the state
-# # print(soup.find_all("h3").text)
-
-
-# parks = soup.find_all("div",{"class" : "col-md-9 col-sm-9 col-xs-12 table-cell list_left"})
-# #create a dictionary with park_name : description
-# types = soup.find_all("h2")
-
-
-
-
-# types = (soup.find_all("h2"))
-# for avalue in types:
-# 	print(avalue.text)
-
-# print("NAMES\n\n\n\n")
-# names = (soup.find_all("h3"))
-# for avalue in names:
-# 	print(avalue.text)
-
-# print("beginning THE PART OF PARKS =-=-=-=-=")
-# parks = soup.find_all("div",{"class" : "col-md-9 col-sm-9 col-xs-12 table-cell list_left"})
-# for avalue in parks: 
-# 	print(avalue)
-# 	print("=-=-=-=-=-=-=-=-=-=-=-=-=")
-
 
 
 
