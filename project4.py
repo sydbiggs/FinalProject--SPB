@@ -94,10 +94,13 @@ class NationalPark():
 		#list of urls associated with each park
 		#THIS ONE IS NOT WORKING
 		parks_urls = {}
+		linklist = []
 		for avalue in parks:
 			park_name = avalue.find("h3").text
-			park_url = avalue.find_all("href")
-			parks_urls[park_name] = park_url
+			park_url = avalue.find_all("a")
+			for link in park_url:
+				mylink = link.get("href")
+			parks_urls[park_name] = mylink
 		self.urls = parks_urls
 
 		#list of the types of park in each state
@@ -127,7 +130,6 @@ class NationalPark():
 		except:
 			print("Sorry, that list isn't working.")
 
-#<h3><a href="/bicr/">Birmingham Civil Rights</a></h3>
 #MY OWN TESTS =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 htmldoc = get_np_states()
@@ -136,60 +138,38 @@ test = NationalPark(avalue)
 # print("State is: ")
 # print(test.state)
 print("OK, so here is where the real test begins\n\n")
-print(test.type)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# print(test.type)
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 # TEST CASES
-class Test_Project5(unittest.TestCase):
+class Test_Final_Project(unittest.TestCase):
+
 	def test_get_np_states_type(self):
-		self.assertEqual(type(get_np_states()),type("Michigan"))
+		self.assertEqual(type(get_np_states()),type(["Michigan", "Best state"]))
+
+	def test_NP_description(self):
+		htmldoc = get_np_states()
+		avalue = htmldoc[0]
+		test = NationalPark(avalue)
+		self.assertEqual(type(test.parks_desc), type({}))
+
+	def test_NP_location(self):
+		htmldoc = get_np_states()
+		avalue = htmldoc[0]
+		test = NationalPark(avalue)
+		self.assertEqual(type(test.location), type({}))
+
 	def test_get_article_info_type(self):
 		self.assertEqual(type(get_article_info()),type("Michigan"))
+
 	def test_NationalPark(self):
-		test = NationalPark(get_np_states())
-		self.assertEqual(test[0].state, "Alabama")
+		htmldoc = get_np_states()
+		avalue = htmldoc[0]
+		test = NationalPark(avalue)
+		self.assertEqual(test.state[:7], "Alabama")
 
-
-
-
-
-
-
-
-
-
-
-
-
+if __name__ == "__main__":
+	unittest.main(verbosity=2)
 
 
